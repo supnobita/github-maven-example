@@ -1,14 +1,20 @@
 pipeline {
   agent any
   stages {
+    
+      stage('SonarQube analysis') {
+         steps {
+    withSonarQubeEnv('sonarqube209') {
+      // requires SonarQube Scanner for Maven 3.2+
+      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+    }
+  }
+  }
     stage('Build') {
       parallel {
         stage('Build') {
           steps {
             echo 'Building Maven code code'
-            sh 'apt-get install build-essential libcurl4-openssl-dev libxml2-dev libssl-dev libfuse-dev libjson-c-dev pkg-config -y'
-            sh './configure'
-            sh 'make'
           }
         }
         stage('newstate') {
